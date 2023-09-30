@@ -12,7 +12,7 @@
         width: 100%; /* Установите ширину изображения */
         height: 0;
         padding-bottom: 34%; /* Установите высоту изображения в соотношении 4:3 (ширина / высота) */
-        background-image: url("{% static 'floor.png' %}"); /* Установите путь к изображению */
+        background-image: url("{% static 'floor_2.png' %}"); /* Установите путь к изображению */
         background-size: cover;
       }
 
@@ -502,11 +502,23 @@
         height: 10%; /* высоту прямоугольника */
       }
       .highlighted {
+        background-color: rgba(0, 128, 0, 0.3);
+      }
+      .highlighted1 {
         background-color: rgba(255, 0, 0, 0.3);
       }
     </style>
     <script>
+      function clearHighlight() {
+    var highlightedElements = document.querySelectorAll('.highlighted');
+    highlightedElements.forEach(function(element) {
+      element.classList.remove('highlighted');
+    });
+  }
+
       function highlightRoom(roomId) {
+      clearHighlight();
+
         // Отправить POST-запрос на сервер с информацией о нажатой комнате
         fetch('/', {
           method: 'POST',
@@ -535,10 +547,42 @@
             console.error('Error:', error);
           });
       }
+
+      function highlightRoom1(roomId) {
+        // Отправить POST-запрос на сервер с информацией о нажатой комнате
+        fetch('/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}',  // Добавьте токен CSRF для защиты от подделки запросов
+          },
+          body: JSON.stringify({
+            room_id: roomId,
+          }),
+        })
+          .then((response) => {
+            if (response.ok) {
+               var roomElement = document.getElementById(roomId);
+               var hasHighlightClass = roomElement.classList.contains('highlighted1');
+
+               if (hasHighlightClass) {
+                 roomElement.classList.remove('highlighted1');
+               }
+               else {
+                 roomElement.classList.add('highlighted1');
+               }
+            }
+          })
+          .catch((error) => {
+            console.error('Error:', error);
+          });
+      }
     </script>
 </head>
+
 <body>
-    <!--навигационная панель-->
+<div class="container">
+  <!--навигационная панель-->
     <nav class="navbar bg-body-tertiary fixed-top">
       <div class="container-fluid">
         <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
@@ -550,32 +594,13 @@
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
           </div>
           <div class="offcanvas-body">
-            <!-- тут всякие ссылки
                 <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">Home</a>
+                <a class="nav-link active" aria-current="page" href="/">1 этаж</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">Link</a>
+                <a class="nav-link" href="/plan">2 этаж</a>
               </li>
-              <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  Dropdown
-                </a>
-                <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" href="#">Action</a></li>
-                  <li><a class="dropdown-item" href="#">Another action</a></li>
-                  <li>
-                    <hr class="dropdown-divider">
-                  </li>
-                  <li><a class="dropdown-item" href="#">Something else here</a></li>
-                </ul>
-              </li>
-            </ul>
-            <form class="d-flex mt-3" role="search">
-              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-              <button class="btn btn-outline-success" type="submit">Search</button>
-            </form>-->
           </div>
         </div>
         <a class="navbar-brand" href="#">Evacuation Plan</a>
@@ -584,9 +609,7 @@
             <img src="https://static.wikia.nocookie.net/slimerancher/images/3/39/Language.png/revision/latest?cb=20170901152602&path-prefix=ru" width="25" height="25">
           </button>
         <ul class="dropdown-menu dropdown-menu-end">
-            <li><button class="dropdown-item" type="button">Язык</button></li>
-            <li><button class="dropdown-item" type="button">Еще язык</button></li>
-            <li><button class="dropdown-item" type="button">Третий язык</button></li>
+            <li><button class="dropdown-item" type="button">Русский язык</button></li>
         </ul>
         </div>
 
@@ -594,89 +617,15 @@
     </nav>
 
     <br><br><br>
+    <h1>Выбери свое местоположение</h1>
     <div class="floor-plan">
-      <!-- Пример комнаты - room1 -->
-      <div class="room room1" id="room1" onclick="highlightRoom('room1')"></div>
-      <div class="room room2" id="room2" onclick="highlightRoom('room2')"></div>
-      <div class="room room3" id="room3" onclick="highlightRoom('room3')"></div>
-      <div class="room room4" id="room4" onclick="highlightRoom('room4')"></div>
-      <div class="room room5" id="room5" onclick="highlightRoom('room5')"></div>
-      <div class="room room6" id="room6" onclick="highlightRoom('room6')"></div>
-      <div class="room room7" id="room7" onclick="highlightRoom('room7')"></div>
-      <div class="room room8" id="room8" onclick="highlightRoom('room8')"></div>
-      <div class="room room9" id="room9" onclick="highlightRoom('room9')"></div>
-      <div class="room room10" id="room10" onclick="highlightRoom('room10')"></div>
-      <div class="room room11" id="room11" onclick="highlightRoom('room11')"></div>
-      <div class="room room12" id="room12" onclick="highlightRoom('room12')"></div>
-      <div class="room room13" id="room13" onclick="highlightRoom('room13')"></div>
-      <div class="room room14" id="room14" onclick="highlightRoom('room14')"></div>
-      <div class="room room15" id="room15" onclick="highlightRoom('room15')"></div>
-      <div class="room room16" id="room16" onclick="highlightRoom('room16')"></div>
-      <div class="room room17" id="room17" onclick="highlightRoom('room17')"></div>
-      <div class="room room18" id="room18" onclick="highlightRoom('room18')"></div>
-      <div class="room room19" id="room19" onclick="highlightRoom('room19')"></div>
-      <div class="room room20" id="room20" onclick="highlightRoom('room20')"></div>
-      <div class="room room21" id="room21" onclick="highlightRoom('room21')"></div>
-      <div class="room room22" id="room22" onclick="highlightRoom('room22')"></div>
-      <div class="room room23" id="room23" onclick="highlightRoom('room23')"></div>
-      <div class="room room24" id="room24" onclick="highlightRoom('room24')"></div>
-      <div class="room room25" id="room25" onclick="highlightRoom('room25')"></div>
-      <div class="room room26" id="room26" onclick="highlightRoom('room26')"></div>
-      <div class="room room27" id="room27" onclick="highlightRoom('room27')"></div>
-      <div class="room room28" id="room28" onclick="highlightRoom('room28')"></div>
-      <div class="room room29" id="room29" onclick="highlightRoom('room29')"></div>
-      <div class="room room30" id="room30" onclick="highlightRoom('room30')"></div>
-      <div class="room room31" id="room31" onclick="highlightRoom('room31')"></div>
-      <div class="room room32" id="room32" onclick="highlightRoom('room32')"></div>
-      <div class="room room33" id="room33" onclick="highlightRoom('room33')"></div>
-      <div class="room room34" id="room34" onclick="highlightRoom('room34')"></div>
-      <div class="room room35" id="room35" onclick="highlightRoom('room35')"></div>
-      <div class="room room36" id="room36" onclick="highlightRoom('room36')"></div>
-      <div class="room room37" id="room37" onclick="highlightRoom('room37')"></div>
-      <div class="room room38" id="room38" onclick="highlightRoom('room38')"></div>
-      <div class="room room39" id="room39" onclick="highlightRoom('room39')"></div>
-      <div class="room room40" id="room40" onclick="highlightRoom('room40')"></div>
-      <div class="room room41" id="room41" onclick="highlightRoom('room41')"></div>
-      <div class="room room42" id="room42" onclick="highlightRoom('room42')"></div>
-      <div class="room room43" id="room43" onclick="highlightRoom('room43')"></div>
-      <div class="room room44" id="room44" onclick="highlightRoom('room44')"></div>
-      <div class="room room45" id="room45" onclick="highlightRoom('room45')"></div>
-      <div class="room room46" id="room46" onclick="highlightRoom('room46')"></div>
-      <div class="room room47" id="room47" onclick="highlightRoom('room47')"></div>
-      <div class="room room48" id="room48" onclick="highlightRoom('room48')"></div>
-      <div class="room room49" id="room49" onclick="highlightRoom('room49')"></div>
-      <div class="room room50" id="room50" onclick="highlightRoom('room50')"></div>
-      <div class="room room73" id="room73" onclick="highlightRoom('room73')"></div>
-      <div class="room room74" id="room74" onclick="highlightRoom('room74')"></div>
-      <div class="room room75" id="room75" onclick="highlightRoom('room75')"></div>
-      <div class="room room76" id="room76" onclick="highlightRoom('room76')"></div>
-      <div class="room room77" id="room77" onclick="highlightRoom('room77')"></div>
-      <div class="room room78" id="room78" onclick="highlightRoom('room78')"></div>
-      <div class="room room79" id="room79" onclick="highlightRoom('room79')"></div>
-      <div class="room room80" id="room80" onclick="highlightRoom('room80')"></div>
-      <div class="room room81" id="room81" onclick="highlightRoom('room81')"></div>
-      <div class="room room82" id="room82" onclick="highlightRoom('room82')"></div>
-      <div class="room room83" id="room83" onclick="highlightRoom('room83')"></div>
-      <div class="room room84" id="room84" onclick="highlightRoom('room84')"></div>
-      <div class="room room85" id="room85" onclick="highlightRoom('room85')"></div>
-      <div class="room room86" id="room86" onclick="highlightRoom('room86')"></div>
-      <div class="room room87" id="room87" onclick="highlightRoom('room87')"></div>
-      <div class="room room88" id="room88" onclick="highlightRoom('room88')"></div>
-      <div class="room room89" id="room89" onclick="highlightRoom('room89')"></div>
-      <div class="room room90" id="room90" onclick="highlightRoom('room90')"></div>
-      <div class="room room91" id="room91" onclick="highlightRoom('room91')"></div>
-      <div class="room room92" id="room92" onclick="highlightRoom('room92')"></div>
-      <div class="room room93" id="room93" onclick="highlightRoom('room93')"></div>
-      <div class="room room94" id="room94" onclick="highlightRoom('room94')"></div>
-      <div class="room room95" id="room95" onclick="highlightRoom('room95')"></div>
-      <div class="room room96" id="room96" onclick="highlightRoom('room96')"></div>
-      <div class="room room97" id="room97" onclick="highlightRoom('room97')"></div>
-      <div class="room room98" id="room98" onclick="highlightRoom('room98')"></div>
-      <div class="room room99" id="room99" onclick="highlightRoom('room99')"></div>
-      <div class="room room100" id="room100" onclick="highlightRoom('room100')"></div>
+    </div>
+    <br>
+    <div class="floor-plan">
     </div>
 
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+</div>
+
 </body>
 </html>
