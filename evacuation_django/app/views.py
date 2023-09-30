@@ -120,3 +120,6 @@ def index_page(request):
 
     # Если метод запроса GET, просто отображаем шаблон с фотографией этажа
     return render(request, 'index.html')
+
+def plan(request):
+    return render(request, 'plan.html')

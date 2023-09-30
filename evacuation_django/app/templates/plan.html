@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    {% load static %}
+    <style>
+      .floor-plan {
+        position: relative;
+        width: 100%; /* Установите ширину изображения */
+        height: 0;
+        padding-bottom: 34%; /* Установите высоту изображения в соотношении 4:3 (ширина / высота) */
+        background-image: url("{% static 'floor.png' %}"); /* Установите путь к изображению */
+        background-size: cover;
+      }
+
+      .room {
+        position: absolute;
+        background-color: rgba(0, 0, 255, 0.3); /* Цвет и прозрачность фона комнаты */
+      }
+
+      /* Комнаты */
+      .room1 {
+        top: 13.6%; /* верхний отступ прямоугольника */
+        left: 0.8%; /* левый отступ прямоугольника */
+        width: 5.08%; /* ширину прямоугольника */
+        height: 16.5%; /* высоту прямоугольника */
+      }
+      .room2 {
+        top: 13.6%; /* верхний отступ прямоугольника */
+        left: 6.05%; /* левый отступ прямоугольника */
+        width: 2.8%; /* ширину прямоугольника */
+        height: 16.2%; /* высоту прямоугольника */
+      }
+      .room3 {
+        top: 13.6%; /* верхний отступ прямоугольника */
+        left: 9%; /* левый отступ прямоугольника */
+        width: 1.54%; /* ширину прямоугольника */
+        height: 6.9%; /* высоту прямоугольника */
+      }
+      .room4 {
+        top: 13.6%; /* верхний отступ прямоугольника */
+        left: 10.55%; /* левый отступ прямоугольника */
+        width: 3.708%; /* ширину прямоугольника */
+        height: 16.5%; /* высоту прямоугольника */
+      }
+      .room5 {
+        top: 26.5%; /* верхний отступ прямоугольника */
+        left: 9%; /* левый отступ прямоугольника */
+        width: 1.35%; /* ширину прямоугольника */
+        height: 3.6%; /* высоту прямоугольника */
+      }
+      .room6 {
+        top: 30.6%; /* верхний отступ прямоугольника */
+        left: 0.8%; /* левый отступ прямоугольника */
+        width: 2.95%; /* ширину прямоугольника */
+        height: 13.5%; /* высоту прямоугольника */
+      }
+      .room7 {
+        top: 50.8%; /* верхний отступ прямоугольника */
+        left: 0.8%; /* левый отступ прямоугольника */
+        width: 1.35%; /* ширину прямоугольника */
+        height: 3.6%; /* высоту прямоугольника */
+      }
+      .highlighted {
+        background-color: rgba(255, 0, 0, 0.3);
+      }
+    </style>
+    <script>
+      function highlightRoom(roomId) {
+        // Отправить POST-запрос на сервер с информацией о нажатой комнате
+        fetch('/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}',  // Добавьте токен CSRF для защиты от подделки запросов
+          },
+          body: JSON.stringify({
+            room_id: roomId,
+          }),
+        })
+          .then((response) => {
+            if (response.ok) {
+               var roomElement = document.getElementById(roomId);
+               var hasHighlightClass = roomElement.classList.contains('highlighted');
+
+               if (hasHighlightClass) {
+                 roomElement.classList.remove('highlighted');
+               }
+               else {
+                 roomElement.classList.add('highlighted');
+               }
+            }
+          })
+          .catch((error) => {
+            console.error('Error:', error);
+          });
+      }
+    </script>
+</head>
+<body>
+    <!--навигационная панель-->
+    <nav class="navbar bg-body-tertiary fixed-top">
+      <div class="container-fluid">
+        <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Что-то тут будет</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <!-- тут всякие ссылки
+                <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Link</a>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Dropdown
+                </a>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="#">Action</a></li>
+                  <li><a class="dropdown-item" href="#">Another action</a></li>
+                  <li>
+                    <hr class="dropdown-divider">
+                  </li>
+                  <li><a class="dropdown-item" href="#">Something else here</a></li>
+                </ul>
+              </li>
+            </ul>
+            <form class="d-flex mt-3" role="search">
+              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+              <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>-->
+          </div>
+        </div>
+        <a class="navbar-brand" href="#">Evacuation Plan</a>
+        <div class="dropdown">
+          <button class="btn  dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <img src="https://static.wikia.nocookie.net/slimerancher/images/3/39/Language.png/revision/latest?cb=20170901152602&path-prefix=ru" width="25" height="25">
+          </button>
+        <ul class="dropdown-menu dropdown-menu-end">
+            <li><button class="dropdown-item" type="button">Язык</button></li>
+            <li><button class="dropdown-item" type="button">Еще язык</button></li>
+            <li><button class="dropdown-item" type="button">Третий язык</button></li>
+        </ul>
+        </div>
+
+      </div>
+    </nav>
+
+    <br><br><br>
+    <div class="floor-plan">
+      <!-- Пример комнаты - room1 -->
+      <div class="room room1" id="room1" onclick="highlightRoom('room1')"></div>
+      <div class="room room2" id="room2" onclick="highlightRoom('room2')"></div>
+      <div class="room room3" id="room3" onclick="highlightRoom('room3')"></div>
+      <div class="room room4" id="room4" onclick="highlightRoom('room4')"></div>
+      <div class="room room5" id="room5" onclick="highlightRoom('room5')"></div>
+        <div class="room room6" id="room6" onclick="highlightRoom('room6')"></div>
+        <div class="room room7" id="room7" onclick="highlightRoom('room7')"></div>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+</body>
+</html>
