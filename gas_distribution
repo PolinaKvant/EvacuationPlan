@@ -1,0 +1,79 @@
+import numpy as np
+import matplotlib.pyplot as plt
+import imageio  # для гифки
+
+# из txt в numpy
+f = open('matrix.txt').readlines()
+m = []
+for st in f:
+    m.append(list(map(int, st.split())))
+
+grid = np.array(m)
+
+# Кол-во фреймов для гифки
+frame_count = 30
+
+
+
+'''
+0 - воздух
+1 - стена
+2 - газ
+3 - двери
+4 - выход
+'''
+
+
+# Функция заполнения комнаты газом
+def gas_distribution(a, b, layout):
+    # начальная позиция утечки
+    layout[a][b] = 2
+    current_gas = [[a, b]]
+
+    # while 1 in layout:
+    for i in range(frame_count):
+
+        # добавление в список точек распространения соседних точек
+        lj = len(current_gas)
+        for j in range(lj):
+            # на каждой итерации этого цикла записываем в эти переменные корды точки, от которой откладываем соседние точки
+            aj = current_gas[j][0]
+            bj = current_gas[j][1]
+
+            current_gas.append([aj + 1, bj])
+            current_gas.append([aj - 1, bj])
+            current_gas.append([aj, bj + 1])
+            current_gas.append([aj, bj - 1])
+
+        #
+        lk = len(current_gas)
+        to_remove = []
+        for k in range(lk):
+            ak = current_gas[k][0]
+            bk = current_gas[k][1]
+            if layout[ak][bk] == 0 or layout[ak][bk] == 3:
+                layout[ak][bk] = 2
+            else:
+                to_remove.append([ak, bk])
+
+        for k2 in range(len(to_remove)):
+            current_gas.remove(to_remove[k2])
+
+        plt.imshow(layout)
+        plt.savefig('imgs/image' + str(i) + '.jpg')
+
+    return layout
+
+
+def generate_anim(fc):
+    images = []  # Создаем пустой список под изображения для gif
+    # Проходим в цикле fc щагов
+    for i in range(fc):
+        images.append(imageio.v2.imread('image' + str(i) + '.jpg'))  # Добавляем в список изображение очередную картинку
+    imageio.mimsave('distr.gif', images, duration=5)  # С помощью метода .mimsave() сохраняем анимацию
+
+
+grid = gas_distribution(10, 25, grid)
+generate_anim(frame_count)
+# plt.imshow(grid)
+# plt.show()
