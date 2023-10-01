@@ -7,6 +7,9 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     {% load static %}
     <style>
+    canvas {
+      border: 1px solid black;
+    }
       .floor-plan {
         position: relative;
         width: 100%; /* Установите ширину изображения */
@@ -40,12 +43,6 @@
         width: 3.708%; /* ширину прямоугольника */
         height: 16.5%; /* высоту прямоугольника */
       }
-      .room4 {
-        top: 26.5%; /* верхний отступ прямоугольника */
-        left: 9%; /* левый отступ прямоугольника */
-        width: 1.35%; /* ширину прямоугольника */
-        height: 3.6%; /* высоту прямоугольника */
-      }
       .room5 {
         top: 30.6%; /* верхний отступ прямоугольника */
         left: 0.8%; /* левый отступ прямоугольника */
@@ -72,8 +69,8 @@
       }
       .room9 {
         top: 30.6%; /* верхний отступ прямоугольника */
-        left: 8.6%; /* левый отступ прямоугольника */
-        width: 5.7%; /* ширину прямоугольника */
+        left: 5.2%; /* левый отступ прямоугольника */
+        width: 9.1%; /* ширину прямоугольника */
         height: 2.6%; /* высоту прямоугольника */
       }
       .room10 {
@@ -589,15 +586,16 @@
 
     <br><br><br>
     <div class="floor-plan">
+      <canvas id="pathCanvas" width="500" height="500"></canvas>
       <!-- Пример комнаты - room1 -->
       <div class="room room1" id="room1" onclick="highlightRoom('room1')"></div>
       <div class="room room2" id="room2" onclick="highlightRoom('room2')"></div>
       <div class="room room3" id="room3" onclick="highlightRoom('room3')"></div>
-      <div class="room room4" id="room4" onclick="highlightRoom('room4')"></div>
+      <!--<div class="room room4" id="room4" onclick="highlightRoom('room4')"></div>-->
       <div class="room room5" id="room5" onclick="highlightRoom('room5')"></div>
       <div class="room room6" id="room6" onclick="highlightRoom('room6')"></div>
       <div class="room room7" id="room7" onclick="highlightRoom('room7')"></div>
-      <div class="room room8" id="room8" onclick="highlightRoom('room8')"></div>
+      <!--<div class="room room8" id="room8" onclick="highlightRoom('room8')"></div>-->
       <div class="room room9" id="room9" onclick="highlightRoom('room9')"></div>
       <div class="room room10" id="room10" onclick="highlightRoom('room10')"></div>
       <div class="room room11" id="room11" onclick="highlightRoom('room11')"></div>
@@ -669,7 +667,6 @@
       <div class="room room99" id="room99" onclick="highlightRoom('room99')"></div>
       <div class="room room100" id="room100" onclick="highlightRoom('room100')"></div>
     </div>
-
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 </body>
