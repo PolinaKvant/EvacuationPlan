@@ -136,8 +136,7 @@ def index_page(request):
         path, distance = shortest_path(grid, start, end)
         print("Кратчайший путь:", path)
         print("Длина кратчайшего пути:", distance)
-        # TODO: тут вернуть в виде render(...)
-        return render(request, 'index.html',  {'path': path})
+        return render(request, 'index.html', {'path': path})
 
     # Если метод запроса GET, просто отображаем шаблон с фотографией этажа
     return render(request, 'index.html')
